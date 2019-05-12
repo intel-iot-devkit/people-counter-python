@@ -1,0 +1,67 @@
+@import './constants/constants.css';
+@import 'font-awesome.css';
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  margin: 0;
+  background: var(--my-white);
+  color: var(--my-white);
+  font-family: 'Intel Clear', sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  overflow-x: hidden;
+  width: 100vw;
+  position: relative;
+  /*text-transform: uppercase;*/
+}
+
+@font-face {
+  font-family: 'Intel Clear';
+  src: url('./assets/fonts/IntelClear-Light.eot');
+  src: url('./assets/fonts/IntelClear-Light.eot?#iefix') format('embedded-opentype'), url('./assets/fonts/IntelClear-Light.woff') format('woff'), url('./assets/fonts/IntelClear-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Intel Clear';
+  src: url('./assets/fonts/IntelClear-LightItalic.eot');
+  src: url('./assets/fonts/IntelClear-LightItalic.eot?#iefix') format('embedded-opentype'), url('./assets/fonts/IntelClear-LightItalic.woff') format('woff'), url('./assets/fonts/IntelClear-LightItalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Intel Clear';
+  src: url('./assets/fonts/IntelClear-Regular.eot');
+  src: url('./assets/fonts/IntelClear-Regular.eot?#iefix') format('embedded-opentype'), url('./assets/fonts/IntelClear-Regular.woff') format('woff'), url('./assets/fonts/IntelClear-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Intel Clear';
+  src: url('./assets/fonts/IntelClear-Italic.eot');
+  src: url('./assets/fonts/IntelClear-Italic.eot?#iefix') format('embedded-opentype'), url('./assets/fonts/IntelClear-Italic.woff') format('woff'), url('./assets/fonts/IntelClear-Italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Intel Clear';
+  src: url('./assets/fonts/IntelClear-Bold.eot');
+  src: url('./assets/fonts/IntelClear-Bold.eot?#iefix') format('embedded-opentype'), url('./assets/fonts/IntelClear-Bold.woff') format('woff'), url('./assets/fonts/IntelClear-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Intel Clear';
+  src: url('./assets/fonts/IntelClear-BoldItalic.eot');
+  src: url('./assets/fonts/IntelClear-BoldItalic.eot?#iefix') format('embedded-opentype'), url('./assets/fonts/IntelClear-BoldItalic.woff') format('woff'), url('./assets/fonts/IntelClear-BoldItalic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}

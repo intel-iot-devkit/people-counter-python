@@ -1,0 +1,23 @@
+:root {
+  --my-black: #222;
+  --my-red: red;
+  --my-white: #fff;
+  --my-light-grey: #f3f3f3;
+  --my-dark-gray: #252525;
+
+  --intel-azure: #00aeef;
+  --intel-border: #979797;
+  --intel-charcoal: #212121;
+  --intel-med-grey: #c9c9c9;
+  --intel-orange: #ee6e41;
+  --intel-orange-yellow: #ffa300;
+  --intel-blood-orange: #fc4c02;
+  --intel-yellow-green: #c4d600;
+}
+
+@define-mixin verticalCenter {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}

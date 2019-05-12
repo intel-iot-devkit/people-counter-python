@@ -1,0 +1,283 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Facial Recognition",
+    "version": "1.0"
+  },
+  "host": "localhost:8000",
+  "paths": {
+    "/profiles": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/profile-sumary"
+            }
+          },
+          "500": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "operationId": "profiles_get"
+      }
+    },
+    "/profiles/profile/{id}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/profile"
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "500": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        },
+        "description": "Returns a profile.",
+        "operationId": "profiles_profile_get"
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "delete": {
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "404": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "500": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        },
+        "description": "Removes a profiile.",
+        "operationId": "profiles_profile_delete"
+      }
+    },
+    "/profiles/profile": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/profile"
+            }
+          },
+          "500": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        },
+        "description": "Creates a new profile from the payload.  A new id value will be generated and any value provided in the POST payload will be ignored.",
+        "parameters": [],
+        "operationId": "profiles_profile_post"
+      },
+      "put": {
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "404": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "500": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        },
+        "description": "Updates an existing profile.",
+        "operationId": "profiles_profile_put"
+      }
+    },
+    "/file/{fileName}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "404": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "500": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        },
+        "operationId": "file_get"
+      },
+      "parameters": [
+        {
+          "name": "fileName",
+          "in": "path",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    "/mqtt": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        },
+        "operationId": "mqtt_post",
+        "description": "Publishes a message to an MQTT topic.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "topic": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "profile": {
+      "type": "object",
+      "title": "Profile of a user or customer.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "clearanceType": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "position": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "age": {
+          "type": "integer",
+          "maximum": 999
+        },
+        "height": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "phone": {
+          "type": "string",
+          "maxLength": 15
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "weight": {
+          "type": "string"
+        },
+        "image": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "profile-sumary": {
+      "type": "object",
+      "title": "A stripped down version of the profile object.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 20
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "error": {
+      "type": "object",
+      "title": "Standardized error message.",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "trace": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "basePath": "/api/facial-recognition"
+}

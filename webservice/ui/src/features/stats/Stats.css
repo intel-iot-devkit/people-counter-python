@@ -1,0 +1,49 @@
+@import '../../constants/constants.css';
+
+.stats {
+  position: absolute;
+  z-index: 100;
+  background-color: #f2f2f2;
+  height: calc( 100vh - 55px);
+  width: 300px;
+  right: 0;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  transition: transform .3s ease-in-out;
+  transform: translateX(400px);
+  &.active {
+    transform: translateX(0);
+  }
+  & button {
+    background-color: transparent;
+    border: none;
+    color: var(--intel-azure);
+    outline: none;
+  }
+}
+
+.total-count-toggle {
+  text-align: right;
+
+  &.hide-toggle {
+    display: none;
+  }
+}
+
+.total-count-container {
+  position: relative;
+}
+
+button.counter-close {
+  color: #fff;
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  z-index: 300;
+}
+
+.hide-count {
+  display: none;
+}
+
+

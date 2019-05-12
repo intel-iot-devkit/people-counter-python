@@ -1,0 +1,65 @@
+@import '../../constants/constants.css';
+
+.btn {
+  border: 0;
+  outline: 0;
+  width: 200px;
+  height: 40px;
+  text-align: center;
+  background: var(--my-white);
+  padding: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  box-sizing: border-box;
+  margin: 10px;
+  display: block;
+  transition: color 100ms linear, background-color 100ms linear;
+
+  &.active {
+  background-color: var(--intel-azure);
+  color: var(--my-white);
+  }
+
+  &.btn-contact {
+    display: block;
+    margin: 0 10px;
+    padding: 0 0 0 10px;
+    text-align: left;
+    width: 90%;
+    &:hover {
+      background-color: var(--intel-azure);
+      color: var(--my-white);
+    }
+    &:disabled{
+      opacity: 0.8;
+      cursor: not-allowed;
+    }
+  }
+
+  &.plus { text-align: left;
+    &:hover {
+      & span {
+        color: var(--intel-azure);
+      }
+    }
+    &:before {
+      background-color: var(--my-white);
+      color: var(--intel-azure);
+      content:"\f055";
+      display: inline-block;
+      font-family: 'FontAwesome';
+      font-size: 16px;
+      margin-right: 5px;
+      text-align: center;
+    }
+  }
+
+  & * {
+    cursor: pointer;
+  }
+}
+
+button:disabled span {
+  opacity: 0.8;
+  cursor: not-allowed;
+}

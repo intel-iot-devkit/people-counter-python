@@ -1,0 +1,37 @@
+@import '../../constants/constants.css';
+
+.data-box {
+  box-sizing: border-box;
+  width: 270px;
+  height: 95px;
+  border-radius: 4px;
+  background-color: #ffffff;
+  box-shadow: 2px 2px 4px 0 rgba(0, 0, 0, 0.25);
+  margin: 10px;
+  & .header {
+    width: 270px;
+    height: 36px;
+    border-radius: 4px 4px 0 0;
+    background-color: #00aeef;
+    font-size: 1.8rem;
+    letter-spacing: -0.2px;
+    text-transform: capitalize;
+    margin-top: 5px;
+    @mixin verticalCenter;
+  }
+  & .data {
+    color: #00aeef;
+    font-size: 40px;
+    font-weight: bold;
+    @mixin verticalCenter;
+  }
+  & .green {
+    color: #b8e986;
+  }
+  & .orange {
+    color: #f6a623;
+  }
+  & .gray {
+    color: #9b9b9b;
+  }
+}
