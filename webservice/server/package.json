@@ -17,11 +17,14 @@
   },
   "homepage": "https://github.com/EmpiricalHub/intel-facial-recognition-server#readme",
   "dependencies": {
+    "minimist": ">=1.2.2",
+    "acorn": ">=5.7.4",
     "mosca": "^2.5.2",
     "restify": "^5.2.0",
     "restify-cors-middleware": "^1.0.1",
-    "sqlite3": "^3.1.11",
+    "sqlite3": "^4.1.1",
     "swagger-routes": "^1.6.0",
     "uuid4": "^1.0.0"
-  }
+  },
+  "devDependencies": {}
 }
