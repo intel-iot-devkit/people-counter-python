@@ -5,7 +5,7 @@ Tested on Node versions 4.2.6 and 8.5.
 
 Get node.js and NPM up and running then...
 
-Install the Node.js dependencies (swagger-routes restify sqlite3 uuid4 mosca):
+Install the Node.js dependencies (swagger-routes restify sqlite4 uuid4 mosca):
 ~~~~
 npm install
 ~~~~
