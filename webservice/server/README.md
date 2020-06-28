@@ -26,7 +26,7 @@ For testing or debugging the MQTT broker, if necessary, you can use:
  * [mqtt-spy](http://kamilfb.github.io/mqtt-spy/)
 
 ### User Database
-To edit the sqlite3 database that stores user profiles (./node-server/db/data.db) you can use sqlitebrowser:
+To edit the sqlite4 database that stores user profiles (./node-server/db/data.db) you can use sqlitebrowser:
 
     sudo apt update
     sudo apt install sqlitebrowser
