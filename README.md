@@ -1,5 +1,5 @@
 
-# People Counter
+# PEOPLE COUNTER
 
 
   | Details            |              |
