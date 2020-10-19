@@ -25,12 +25,12 @@
 import os
 import sys
 import logging as log
-from openvino.inference_engine import IENetwork, IEPlugin
+from openvino.inference_engine import IENetwork, IECore
 
 
 class Network:
     """
-    Load and configure inference plugins for the specified target devices 
+    Load and configure inference plugins for the specified target devices
     and performs synchronous and asynchronous modes for the specified infer requests.
     """
 
@@ -44,6 +44,7 @@ class Network:
 
     def load_model(self, model, device, input_size, output_size, num_requests, cpu_extension=None, plugin=None):
         """
+
          Loads a network and an image to the Inference Engine plugin.
         :param model: .xml file of pre trained model
         :param cpu_extension: extension for the CPU device
@@ -61,26 +62,26 @@ class Network:
         # and load extensions library if specified
         if not plugin:
             log.info("Initializing plugin for {} device...".format(device))
-            self.plugin = IEPlugin(device=device)
+            self.plugin = IECore()
         else:
             self.plugin = plugin
 
-        if cpu_extension and 'CPU' in device:
-            self.plugin.add_cpu_extension(cpu_extension)
+        #if cpu_extension and 'CPU' in device:
+        #    self.plugin.add_extension(cpu_extension, "CPU")
 
         # Read IR
         log.info("Reading IR...")
-        self.net = IENetwork(model=model_xml, weights=model_bin)
+        self.net = self.plugin.read_network(model=model_xml, weights=model_bin)
         log.info("Loading IR to the plugin...")
 
-        if self.plugin.device == "CPU":
-            supported_layers = self.plugin.get_supported_layers(self.net)
+        if "CPU" in device:
+            supported_layers = self.plugin.query_network(self.net, "CPU")
             not_supported_layers = \
                 [l for l in self.net.layers.keys() if l not in supported_layers]
             if len(not_supported_layers) != 0:
                 log.error("Following layers are not supported by "
                           "the plugin for specified device {}:\n {}".
-                          format(self.plugin.device,
+                          format(device,
                                  ', '.join(not_supported_layers)))
                 log.error("Please try to specify cpu extensions library path"
                           " in command line parameters using -l "
@@ -89,9 +90,9 @@ class Network:
 
         if num_requests == 0:
             # Loads network read from IR to the plugin
-            self.net_plugin = self.plugin.load(network=self.net)
+            self.net_plugin = self.plugin.load_network(network=self.net, device_name=device)
         else:
-            self.net_plugin = self.plugin.load(network=self.net, num_requests=num_requests)
+            self.net_plugin = self.plugin.load_network(network=self.net, num_requests=num_requests, device_name=device)
 
         self.input_blob = next(iter(self.net.inputs))
         self.out_blob = next(iter(self.net.outputs))
@@ -99,7 +100,6 @@ class Network:
             "Supports only {} input topologies".format(len(self.net.inputs))
         assert len(self.net.outputs) == output_size, \
             "Supports only {} output topologies".format(len(self.net.outputs))
-
         return self.plugin, self.get_input_shape()
 
     def get_input_shape(self):
@@ -114,7 +114,7 @@ class Network:
         Queries performance measures per layer to get feedback of what is the
         most time consuming layer.
         :param request_id: Index of Infer request value. Limited to device capabilities
-        :return: Performance of the layer  
+        :return: Performance of the layer
         """
         perf_count = self.net_plugin.requests[request_id].get_perf_counts()
         return perf_count
@@ -126,8 +126,7 @@ class Network:
         :param frame: Input image
         :return: Instance of Executable Network class
         """
-        self.infer_request_handle = self.net_plugin.start_async(
-            request_id=request_id, inputs={self.input_blob: frame})
+        self.infer_request_handle = self.net_plugin.start_async(request_id=request_id, inputs={self.input_blob: frame})
         return self.net_plugin
 
     def wait(self, request_id):

@@ -36,10 +36,12 @@ from inference import Network
 # MQTT server environment variables
 HOSTNAME = socket.gethostname()
 IPADDRESS = socket.gethostbyname(HOSTNAME)
+TOPIC = "people_counter_python"
 MQTT_HOST = IPADDRESS
 MQTT_PORT = 1884
 MQTT_KEEPALIVE_INTERVAL = 60
 
+CONFIG_FILE = '../resources/config.json'
 
 def build_argparser():
     """
@@ -50,8 +52,6 @@ def build_argparser():
     parser = ArgumentParser()
     parser.add_argument("-m", "--model", required=True, type=str,
                         help="Path to an xml file with a trained model.")
-    parser.add_argument("-i", "--input", required=True, type=str,
-                        help="Path to image or video file")
     parser.add_argument("-l", "--cpu_extension", required=False, type=str,
                         default=None,
                         help="MKLDNN (CPU)-targeted custom layers."
@@ -68,7 +68,6 @@ def build_argparser():
     parser.add_argument("-pc", "--perf_counts", type=str, default=False,
                         help="Print performance counters")
     return parser
-
 
 def performance_counts(perf_count):
     """
@@ -116,14 +115,17 @@ def main():
 
     :return: None
     """
+
     # Connect to the MQTT server
     client = mqtt.Client()
     client.connect(MQTT_HOST, MQTT_PORT, MQTT_KEEPALIVE_INTERVAL)
+    client.subscribe(TOPIC)
 
     args = build_argparser().parse_args()
 
     # Flag for the input image
     single_image_mode = False
+
 
     cur_request_id = 0
     last_count = 0
@@ -136,24 +138,26 @@ def main():
     n, c, h, w = infer_network.load_model(args.model, args.device, 1, 1,
                                           cur_request_id, args.cpu_extension)[1]
 
-    # Checks for live feed
-    if args.input == 'CAM':
-        input_stream = 0
 
-    # Checks for input image
-    elif args.input.endswith('.jpg') or args.input.endswith('.bmp') :
-        single_image_mode = True
-        input_stream = args.input
+    assert os.path.isfile(CONFIG_FILE), "{} file doesn't exist".format(CONFIG_FILE)
+    config = json.loads(open(CONFIG_FILE).read())
 
-    # Checks for video file
-    else:
-        input_stream = args.input
-        assert os.path.isfile(args.input), "Specified input file doesn't exist"
+    for idx, item in enumerate(config['inputs']):
+        if item['video'].isdigit():
+            input_stream = int(item['video'])
+        elif [item['video'].endswith('.jpg') or item['video'].endswith('.bmp')] :
+            single_image_mode = True
+            input_stream = item['video']
+
+        else:
+            input_stream = item['video']
+
 
     cap = cv2.VideoCapture(input_stream)
 
+
     if input_stream:
-        cap.open(args.input)
+        cap.open(input_stream)
 
     if not cap.isOpened():
         log.error("ERROR! Unable to open video source")
@@ -165,7 +169,7 @@ def main():
         flag, frame = cap.read()
         if not flag:
             break
-        key_pressed = cv2.waitKey(60)
+        key_pressed = cv2.waitKey(1)
         # Start async inference
         image = cv2.resize(frame, (w, h))
         # Change data layout from HWC to CHW
@@ -209,7 +213,7 @@ def main():
                 break
 
         # Send frame to the ffmpeg server
-        sys.stdout.buffer.write(frame)  
+        sys.stdout.buffer.write(frame)
         sys.stdout.flush()
 
         if single_image_mode:
