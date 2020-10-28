@@ -1,23 +1,24 @@
-﻿# People Counter
+
+# People Counter
 
 
-  | Details            |              |
+   | Details            |              |
 |-----------------------|---------------|
 | Target OS:            |  Ubuntu\* 18.04 LTS   |
 | Programming Language: |  Python* 3.6 |
 | Time to Complete:    |  45 min     |
 
-![people-counter-python](./images/people-counter-image.png)
+![people-counter-python](../docs/images/people-counter-image.png)
 
 ## What it Does
 
-The people counter application is one of a series of IoT reference implementations aimed at instructing users on how to develop a working solution for a particular problem. It demonstrates how to create a smart video IoT solution using Intel® hardware and software tools. This solution detects people in a designated area, providing the number of people in the frame, average duration of people in frame, and total count.
+The people counter application is one of a series of IoT reference implementations aimed at instructing users on how to develop a working solution for a particular problem. It demonstrates how to create a smart video IoT solution using Intel� hardware and software tools. This solution detects people in a designated area, providing the number of people in the frame, average duration of people in frame, and total count.
 
 ## Requirements
 
 ### Hardware
 
-*  6th to 8th generation Intel® Core™ processor with Iris® Pro graphics or Intel® HD Graphics.
+*  6th to 8th generation Intel� Core� processor with Iris� Pro graphics or Intel� HD Graphics.
 
 ### Software
 
@@ -28,8 +29,8 @@ The people counter application is one of a series of IoT reference implementatio
      ```
      uname -a
      ```
-*   Intel® Distribution of OpenVINO™ toolkit 2020 R3 Release
-*   OpenCL™ Runtime Package
+*   Intel� Distribution of OpenVINO� toolkit 2020 R3 Release
+*   OpenCL� Runtime Package
 *   Node v6.17.1
 *   Npm v3.10.10
 *   MQTT Mosca\* server
@@ -39,30 +40,41 @@ The people counter application is one of a series of IoT reference implementatio
 
 This application uses the [person-detection-retail-0013](https://docs.openvinotoolkit.org/2020.3/_models_intel_person_detection_retail_0013_description_person_detection_retail_0013.html) Intel® model, that can be accessed using the **model downloader**. The **model downloader** downloads the __.xml__ and __.bin__ files that will be used by the application.
 
+### Install the dependencies
+
 To install the dependencies of the RI and to download the **person-detection-retail-0013** Intel® model, run the following command:
 ```
 cd <path_to_the_people-counter-python_directory>
 ./setup.sh
 ```
 
+Make sure the npm and node versions are exact, using the commands given below:
+```
+node -v
+```
+The version should be **v6.17.1**
 
-*->   Make sure the below versions are exact
-*       Node v6.17.1 ( Command to check node version:  node -v )
-*       Npm v3.10.10 ( Command to check npm version: npm -v )
+```
+npm -v
+```
+The version should be **v3.10.10**
 
-*     If the Node and Npm versions are different, run the following commands
-        * npm install -g n
-        * n 6.17.1
+**Note**: If the Node and Npm versions are different, run the following commands:
+```
+sudo npm install -g n
+sudo n 6.17.1
+```
+Note: After running the above commands, please open a new terminal to proceed further. Also, verify the node and npm versions from the new terminal.
 
 ## How it Works
 
-The counter uses the Inference Engine included in the Intel® Distribution of OpenVINO™ toolkit and the Intel® Deep Learning Deployment Toolkit. A pre-trained, SSD neural network detects people within a designated area by displaying a bounding box over them. It counts the number of people in the current frame, the duration that a person is in the frame (time elapsed between entering and exiting a frame) and the total count of people. It then sends the data to a local web server using the Paho MQTT Python package.
+The counter uses the Inference Engine included in the Intel� Distribution of OpenVINO� toolkit and the Intel� Deep Learning Deployment Toolkit. A pre-trained, SSD neural network detects people within a designated area by displaying a bounding box over them. It counts the number of people in the current frame, the duration that a person is in the frame (time elapsed between entering and exiting a frame) and the total count of people. It then sends the data to a local web server using the Paho MQTT Python package.
 
-The DNN model used in this application is an Intel® optimized model that is part of the Intel® Distribution of OpenVINO™ toolkit. You can find it here:
+The DNN model used in this application is an Intel� optimized model that is part of the Intel� Distribution of OpenVINO� toolkit. You can find it here:
 
 ```/opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/intel/person-detection-retail-0013/```
 
-![architectural diagram](./images/arch_diagram.png)
+![architectural diagram](../docs/images/arch_diagram.png)
 
 ## Setup
 
@@ -72,24 +84,17 @@ Steps to clone the reference implementation:
 
 ```
 sudo apt-get update && sudo apt-get install git
-git clone https://gitlab.devtools.intel.com/reference-implementations/people-counter-python.git
+git clone https://github.com/intel-iot-devkit/people-counter-python.git 
 ```
 
-### Install Intel® Distribution of OpenVINO™ toolkit
+### Install Intel� Distribution of OpenVINO� toolkit
 
-Refer to [https://software.intel.com/en-us/articles/OpenVINO-Install-Linux](https://software.intel.com/en-us/articles/OpenVINO-Install-Linux) for more information about how to install and setup the Intel® Distribution of OpenVINO™ toolkit.
+Refer to [https://software.intel.com/en-us/articles/OpenVINO-Install-Linux](https://software.intel.com/en-us/articles/OpenVINO-Install-Linux) for more information about how to install and setup the Intel� Distribution of OpenVINO� toolkit.
 
-You will need the OpenCL™ Runtime Package if you plan to run inference on the GPU. It is not mandatory for CPU inference.
+You will need the OpenCL� Runtime Package if you plan to run inference on the GPU. It is not mandatory for CPU inference.
 
-### Other dependencies
-
+## Other Dependecies Installation
 #### Install npm
-
-There are three components that need to be running in separate terminals for this application to work:
-
--   MQTT Mosca server
--   Node.js* Web server
--   FFmpeg server
 
 Go to people-counter-python directory
 ```
@@ -99,6 +104,7 @@ cd <path_to_people-counter-python_directory>
    ```
    cd webservice/server
    npm install
+   npm i jsonschema@1.2.6
    ```
 
 * For Web server:
@@ -106,15 +112,6 @@ cd <path_to_people-counter-python_directory>
   cd ../ui
   npm install
   ```
-  **Note:** If any configuration errors occur in mosca server or Web server while using **npm install**, use the below commands:
-   ```
-   sudo npm install npm -g
-   rm -rf node_modules
-   npm cache clean
-   npm config set registry "http://registry.npmjs.org"
-   npm install
-   ```
-
 ### The Config File
 
 The resources/config.json contains the path to the videos that will be used by the application.
@@ -177,11 +174,25 @@ For example, if the output of above command is /dev/video0, then config.json wou
 
 ## Run the application
 
+There are three components need to be running in separate terminals for this application to work:
+
+-   MQTT Mosca server
+-   Node.js* Web server
+-   FFmpeg server
+
 Go to people-counter-python directory:
 ```
 cd <path_to_people-counter-python_directory>
 ```
 ### Step 1 - Start the Mosca server
+
+Ensure that no process is running at port address 3000 / 8000, using the following command:
+```
+sudo lsof -i:3000
+
+```
+
+Navigate to the `node-server` path and run the server using following commands:
 
 ```
 cd webservice/server/node-server
@@ -232,7 +243,7 @@ source /opt/intel/openvino/bin/setupvars.sh
    ```
    jupyter notebook
    ```
-    ![jupyter notebook](images/jupy1.png)
+    ![jupyter notebook](../docs/images/jupy1.png)
 
 3. Follow the below steps to run the code.
 
@@ -244,10 +255,10 @@ source /opt/intel/openvino/bin/setupvars.sh
 
     * Export the below environment variables in the second cell of Jupyter and press Shift+Enter.
 
-        %env MODEL=/opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/intel/person-detection-retail-0013/FP32/person-detection-retail-0013.xml <br>
-        %env DEVICE=CPU <br>
-        %env PERF_COUNTS=0 <br>
-        %env PROB_THRESHOLD=0.6 <br>
+        %env MODEL=/opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/intel/person-detection-retail-0013/FP32/person-detection-retail-0013.xml
+        %env DEVICE=CPU
+        %env PERF_COUNTS=0
+        %env PROB_THRESHOLD=0.6
 
    * Copy the code from **people_counter_jupyter.py** and paste it in the next cell and press **Shift+Enter**.
 
@@ -264,7 +275,7 @@ source /opt/intel/openvino/bin/setupvars.sh
        * Click on Restart and Run All Cells.
        * To see output on web based interface, open the link [http://localhost:8080](http://localhost:8080/) on browser.
 
-    ![jupyter notebook](images/jupy2.png)
+    ![jupyter notebook](../docs/images/jupy2.png)
 
  **NOTE:**
 

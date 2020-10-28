@@ -8,7 +8,7 @@
 | Programming Language: |  Python* 3.6 |
 | Time to Complete:    |  45 min     |
 
-![people-counter-python](./images/people-counter-image.png)
+![people-counter-python](./docs/images/people-counter-image.png)
 
 ## What it Does
 
@@ -40,6 +40,8 @@ The people counter application is one of a series of IoT reference implementatio
 
 This application uses the [person-detection-retail-0013](https://docs.openvinotoolkit.org/2020.3/_models_intel_person_detection_retail_0013_description_person_detection_retail_0013.html) Intel® model, that can be accessed using the **model downloader**. The **model downloader** downloads the __.xml__ and __.bin__ files that will be used by the application.
 
+### Install the dependencies
+
 To install the dependencies of the RI and to download the **person-detection-retail-0013** Intel® model, run the following command:
 ```
 cd <path_to_the_people-counter-python_directory>
@@ -59,9 +61,10 @@ The version should be **v3.10.10**
 
 **Note**: If the Node and Npm versions are different, run the following commands:
 ```
-npm install -g n
-n 6.17.1
+sudo npm install -g n
+sudo n 6.17.1
 ```
+Note: After running the above commands, please open a new terminal to proceed further. Also, verify the node and npm versions from the new terminal.
 
 ## How it Works
 
@@ -71,7 +74,7 @@ The DNN model used in this application is an Intel� optimized model that is pa
 
 ```/opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/intel/person-detection-retail-0013/```
 
-![architectural diagram](./images/arch_diagram.png)
+![architectural diagram](./docs/images/arch_diagram.png)
 
 ## Setup
 
@@ -90,15 +93,8 @@ Refer to [https://software.intel.com/en-us/articles/OpenVINO-Install-Linux](http
 
 You will need the OpenCL� Runtime Package if you plan to run inference on the GPU. It is not mandatory for CPU inference.
 
-### Other dependencies
-
+## Other Dependecies Installation
 #### Install npm
-
-There are three components that need to be running in separate terminals for this application to work:
-
--   MQTT Mosca server
--   Node.js* Web server
--   FFmpeg server
 
 Go to people-counter-python directory
 ```
@@ -108,6 +104,7 @@ cd <path_to_people-counter-python_directory>
    ```
    cd webservice/server
    npm install
+   npm i jsonschema@1.2.6
    ```
 
 * For Web server:
@@ -115,16 +112,6 @@ cd <path_to_people-counter-python_directory>
   cd ../ui
   npm install
   ```
-  **Note:** If any configuration errors occur in mosca server or Web server while using **npm install**, use the below commands:
-   ```
-   sudo npm install npm -g
-   rm -rf node_modules
-   npm cache clean
-   npm config set registry "http://registry.npmjs.org"
-   npm install
-   ```
-
-
 ### The Config File
 
 The resources/config.json contains the path to the videos that will be used by the application.
@@ -187,18 +174,30 @@ For example, if the output of above command is /dev/video0, then config.json wou
 
 ## Run the application
 
+There are three components need to be running in separate terminals for this application to work:
+
+-   MQTT Mosca server
+-   Node.js* Web server
+-   FFmpeg server
+
 Go to people-counter-python directory:
 ```
 cd <path_to_people-counter-python_directory>
 ```
 ### Step 1 - Start the Mosca server
 
+Ensure that no process is running at port address 3000 / 8000, using the following command:
+```
+sudo lsof -i:3000
+```
+
+Navigate to the `node-server` path and run the server using following commands:
 ```
 cd webservice/server/node-server
 node ./server.js
 ```
 
-You should see the following message, if successful:
+If successful, this message will appear in the terminal:
 ```
 connected to ./db/data.db
 Mosca server started.
@@ -284,7 +283,7 @@ To see the output on a web based interface, open the link [http://localhost:8080
 #### Running on the Intel� Neural Compute Stick
 To run on the Intel� Neural Compute Stick, use the ```-d MYRIAD``` command-line argument:
 ```
-python3 people_counter.py -d MYRIAD -m /opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/intel/person-detection-retail-0013/FP16/person-detection-retail-0013.xml -d GPU -pt 0.6 | ffmpeg -v warning -f rawvideo -pixel_format bgr24 -video_size 768x432 -framerate 24 -i - http://localhost:8090/fac.ffm
+python3 people_counter.py -d MYRIAD -m /opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/intel/person-detection-retail-0013/FP16/person-detection-retail-0013.xml -pt 0.6 | ffmpeg -v warning -f rawvideo -pixel_format bgr24 -video_size 768x432 -framerate 24 -i - http://localhost:8090/fac.ffm
 ```
 To see the output on a web based interface, open the link [http://localhost:8080](http://localhost:8080/) in a browser.<br>
 **Note:** The Intel� Neural Compute Stick can only run FP16 models. The model that is passed to the application, through the `-m <path_to_model>` command-line argument, must be of data type FP16.
