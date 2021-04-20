@@ -39,6 +39,11 @@ IPADDRESS = socket.gethostbyname(HOSTNAME)
 TOPIC = "people_counter_python"
 MQTT_HOST = IPADDRESS
 MQTT_PORT = 1884
+MQTT_SERVER = os.environ.get('MQTT_SERVER')
+if(MQTT_SERVER != None):
+    MQTT_HOST = MQTT_SERVER.split(":")[0]
+    MQTT_PORT = int(MQTT_SERVER.split(":")[1])
+
 MQTT_KEEPALIVE_INTERVAL = 60
 
 CONFIG_FILE = '../resources/config.json'
@@ -213,8 +218,8 @@ def main():
                 break
 
         # Send frame to the ffmpeg server
-        sys.stdout.buffer.write(frame)
-        sys.stdout.flush()
+        #sys.stdout.buffer.write(frame)
+        #sys.stdout.flush()
 
         if single_image_mode:
             cv2.imwrite('output_image.jpg', frame)
