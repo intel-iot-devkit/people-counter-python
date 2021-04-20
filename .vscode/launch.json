@@ -13,6 +13,7 @@
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}/application",
             "env": {
+                "DISPLAY" : ":0",
                 "MQTT_SERVER":"192.168.63.95:11883",
                 "MQTT_CLIENT_ID":"cvservice",
                 "PYTHONPATH" : "/opt/intel/openvino/python/python3.6:/opt/intel/openvino/python/python3:/opt/intel/openvino/deployment_tools/open_model_zoo/tools/accuracy_checker:/opt/intel/openvino/deployment_tools/model_optimizer:/opt/intel/openvino/data_processing/dl_streamer/python:/opt/intel/openvino/data_processing/gstreamer/lib/python3.6/site-packages:/opt/intel/openvino/python/python3.6",

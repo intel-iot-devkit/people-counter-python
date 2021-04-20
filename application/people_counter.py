@@ -29,6 +29,8 @@ import cv2
 
 import logging as log
 import paho.mqtt.client as mqtt
+import base64
+import numpy as np
 
 from argparse import ArgumentParser
 from inference import Network
@@ -39,6 +41,7 @@ IPADDRESS = socket.gethostbyname(HOSTNAME)
 TOPIC = "people_counter_python"
 MQTT_HOST = IPADDRESS
 MQTT_PORT = 1884
+DISPLAY_IMAGE = False
 MQTT_SERVER = os.environ.get('MQTT_SERVER')
 if(MQTT_SERVER != None):
     MQTT_HOST = MQTT_SERVER.split(":")[0]
@@ -193,9 +196,10 @@ def main():
                 performance_counts(perf_count)
 
             frame, current_count = ssd_out(frame, result)
-            inf_time_message = "Inference time: {:.3f}ms"\
+            if DISPLAY_IMAGE:
+                inf_time_message = "Inference time: {:.3f}ms"\
                                .format(det_time * 1000)
-            cv2.putText(frame, inf_time_message, (15, 15),
+                cv2.putText(frame, inf_time_message, (15, 15),
                         cv2.FONT_HERSHEY_COMPLEX, 0.5, (200, 10, 10), 1)
 
             # When new person enters the video
@@ -210,8 +214,26 @@ def main():
                 # Publish messages to the MQTT server
                 client.publish("person/duration",
                                json.dumps({"duration": duration}))
+                               
+            image_base64 = "None"
+            if current_count != last_count:
+                frame2send = cv2.resize(frame, (640, 480))
+                jpg_str = cv2.imencode('.jpg', frame2send)[1].tostring()
+                base_64_enc = base64.b64encode(jpg_str)
+                image_base64 = base_64_enc.decode('utf-8')
 
-            client.publish("person", json.dumps({"count": current_count}))
+                if DISPLAY_IMAGE:
+                    decoded_data = base64.b64decode(image_base64)
+                    if decoded_data is None:
+                        sys.exit('decoded_data is None!')
+
+                    np_data = np.fromstring(decoded_data, np.uint8)
+                    if np_data.size != 0:
+                        img = cv2.imdecode(np_data, cv2.IMREAD_UNCHANGED)
+                        cv2.imshow("Detected Person!", img)
+                        cv2.waitKey(1)
+
+            client.publish("person", json.dumps({"count": current_count, "image_base64": image_base64}))
             last_count = current_count
 
             if key_pressed == 27:
