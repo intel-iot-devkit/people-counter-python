@@ -2,7 +2,7 @@ version: '3.2'
 services:
   peoplecounterpython:
     restart: unless-stopped
-    image: "peoplecounterpython:latest"
+    image: "docker.pkg.github.com/juganu-brighter/people-counter-python/peoplecounterpython:latest"
     build: .
     expose:
         - 8888
