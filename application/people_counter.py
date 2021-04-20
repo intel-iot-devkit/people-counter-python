@@ -216,7 +216,7 @@ def main():
                                json.dumps({"duration": duration}))
                                
             image_base64 = "None"
-            if current_count != last_count:
+            if current_count != last_count and current_count > 0:
                 frame2send = cv2.resize(frame, (640, 480))
                 jpg_str = cv2.imencode('.jpg', frame2send)[1].tostring()
                 base_64_enc = base64.b64encode(jpg_str)

@@ -1,0 +1,17 @@
+version: '3.2'
+services:
+  peoplecounterpython:
+    restart: unless-stopped
+    image: "peoplecounterpython:latest"
+    build: .
+    expose:
+        - 8888
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./resources:/resources
+    environment: 
+      - MQTT_SERVER=192.168.63.95:11883
+    command: ['python3', "people_counter.py", "-m","/opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/intel/person-detection-retail-0013/FP32/person-detection-retail-0013.xml","-d","CPU","-pt","0.6"]
+
+
